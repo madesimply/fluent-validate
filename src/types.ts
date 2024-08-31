@@ -10,7 +10,12 @@ type CleanAndMutable<T> = T extends object
   ? { -readonly [K in keyof T]: CleanAndMutable<T[K]> }
   : T;
 
-// Modified InferSingle type to handle array.items
+type HasDefault<T> = T extends { chain: (infer C)[] }
+  ? C extends { method: 'string.default' | 'number.default' | 'boolean.default' | 'array.default' | 'object.default' }
+    ? true
+    : HasDefault<{ chain: Exclude<C, { method: string }>[] }>
+  : false;
+
 type InferSingle<T> = CleanAndMutable<
   T extends { method: infer M extends string; args: infer A }
     ? M extends 'enum'
@@ -29,7 +34,8 @@ type InferSingle<T> = CleanAndMutable<
 
 type InferObjectProps<A> = A extends [infer P]
   ? P extends Record<string, any>
-    ? { [K in keyof P]: Infer<ExtractChain<P[K]>> }
+    ? { [K in keyof P as HasDefault<P[K]> extends true ? K : never]?: Infer<ExtractChain<P[K]>> } &
+      { [K in keyof P as HasDefault<P[K]> extends false ? K : never]: Infer<ExtractChain<P[K]>> }
     : never
   : never;
 
