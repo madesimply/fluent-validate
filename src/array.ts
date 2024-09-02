@@ -48,17 +48,20 @@ export const array = {
   },
   items(this: Context, data: any, items: any, msg: string = "") {
     return this.validate.array(data, (value) => {
-      const valid = value && value.every((v: any) => {
-        const _data = {};
-        this.validate.set("value", _data, v);
+      const valid =
+        value &&
+        value.every((v: any) => {
+          const _data = {};
+          this.validate.set("value", _data, v);
 
-        return items.run(_data).valid;
-      });
+          return items.run(_data).valid;
+        });
       return {
         valid,
         error: valid
           ? null
-          : msg || `invalid items - expected ${items.chain[0].method.split(".")[0]}`,
+          : msg ||
+            `invalid items - expected ${items.chain[0].method.split(".")[0]}`,
       };
     });
   },

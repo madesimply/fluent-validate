@@ -1,4 +1,4 @@
-import { Context, Validator } from './types';
+import { Context, Validator } from "./types";
 
 const validType = (value: any, type: string) => {
   switch (type) {
@@ -15,14 +15,18 @@ const validType = (value: any, type: string) => {
     default:
       return false;
   }
-}
+};
 
-function get(target: 'value' | 'valid' | 'errors', data: any, defaultValue?: any) {
+function get(
+  target: "value" | "valid" | "errors",
+  data: any,
+  defaultValue?: any
+) {
   data[target] = data[target] || defaultValue;
   return data[target];
 }
 
-function set(target: 'value' | 'valid' | 'errors', data: any, value: any) {
+function set(target: "value" | "valid" | "errors", data: any, value: any) {
   data[target] = value;
   return data;
 }
@@ -31,10 +35,9 @@ function validate(
   self: Context,
   type: string,
   data: any,
-  validator: Validator,
+  validator: Validator
 ) {
-  if (!self.validate) 
-    throw new Error("validate is not defined in context");
+  if (!self.validate) throw new Error("validate is not defined in context");
 
   const errors = self.validate.get("errors", data, []);
   self.validate.set("errors", data, errors);
@@ -64,17 +67,21 @@ function validate(
   }
 
   return data;
-};
-
+}
 
 export const ctx: Context = {
-  validate: { 
+  validate: {
     set,
     get,
-    string: (data: any, validator: Validator) => validate(ctx, 'string', data, validator),
-    number: (data: any, validator: Validator) => validate(ctx, 'number', data, validator),
-    boolean: (data: any, validator: Validator) => validate(ctx, 'boolean', data, validator),
-    object: (data: any, validator: Validator) => validate(ctx, 'object', data, validator),
-    array: (data: any, validator: Validator) => validate(ctx, 'array', data, validator),
-  }
+    string: (data: any, validator: Validator) =>
+      validate(ctx, "string", data, validator),
+    number: (data: any, validator: Validator) =>
+      validate(ctx, "number", data, validator),
+    boolean: (data: any, validator: Validator) =>
+      validate(ctx, "boolean", data, validator),
+    object: (data: any, validator: Validator) =>
+      validate(ctx, "object", data, validator),
+    array: (data: any, validator: Validator) =>
+      validate(ctx, "array", data, validator),
+  },
 };

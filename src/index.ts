@@ -26,4 +26,3 @@ export const api: Api = {
 export const validator = fluent({ api, ctx }) as Fluent<Api, Api, []>;
 
 export { Infer, Context, ctx };
-

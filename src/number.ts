@@ -4,7 +4,7 @@ export const number = {
   coerce(this: Context, data: any) {
     return this.validate.number(data, (value) => {
       try {
-        const parsed = Number(value);  
+        const parsed = Number(value);
         return { valid: true, error: null, value: parsed };
       } catch (e) {
         return { valid: false, error: "invalid number" };
@@ -20,7 +20,7 @@ export const number = {
         return { valid: true, error: null, value: defaultValue };
       }
       return { valid: true, error: null, value };
-    })
+    });
   },
   required(this: Context, data: any, msg: string = "") {
     return this.validate.number(data, (value) => {
@@ -37,13 +37,19 @@ export const number = {
   min(this: Context, data: any, min: number, msg: string = "") {
     return this.validate.number(data, (value) => {
       const valid = value >= min;
-      return { valid, error: valid ? null : msg || `too small - min value ${min}` };
+      return {
+        valid,
+        error: valid ? null : msg || `too small - min value ${min}`,
+      };
     });
   },
   max(this: Context, data: any, max: number, msg: string = "") {
     return this.validate.number(data, (value) => {
       const valid = value <= max;
-      return { valid, error: valid ? null : msg || `too large - max value ${max}` };
+      return {
+        valid,
+        error: valid ? null : msg || `too large - max value ${max}`,
+      };
     });
   },
   integer(this: Context, data: any, msg: string = "") {
@@ -51,5 +57,5 @@ export const number = {
       const valid = Number.isInteger(value);
       return { valid, error: valid ? null : msg || "invalid integer" };
     });
-  }
-}
+  },
+};

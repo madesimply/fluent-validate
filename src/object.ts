@@ -28,7 +28,12 @@ export const object = {
       return { valid, error: valid ? null : msg || "object is required" };
     });
   },
-  props(this: Context, data: any, props: Record<string, any>, msg: string = "") {
+  props(
+    this: Context,
+    data: any,
+    props: Record<string, any>,
+    msg: string = ""
+  ) {
     return this.validate.object(data, (value) => {
       const keys = Object.keys(props);
       let valid = true;
@@ -49,10 +54,13 @@ export const object = {
         }
       }
       if (!valid) {
-        const error = msg || failedKeys.length ? `invalid props - ${failedKeys.join(", ")}` : "";
+        const error =
+          msg || failedKeys.length
+            ? `invalid props - ${failedKeys.join(", ")}`
+            : "";
         return { valid: false, error };
       }
       return { valid: true, error: null };
     });
-  }
-}
+  },
+};

@@ -4,7 +4,7 @@ export const string = {
   coerce(this: Context, data: any) {
     return this.validate.string(data, (value) => {
       try {
-        const parsed = value.toString();  
+        const parsed = value.toString();
         return { valid: true, error: null, value: parsed };
       } catch (e) {
         return { valid: false, error: "invalid string" };
@@ -20,7 +20,7 @@ export const string = {
         return { valid: true, error: null, value: defaultValue };
       }
       return { valid: true, error: null, value };
-    })
+    });
   },
   required(this: Context, data: any, msg: string = "") {
     return this.validate.string(data, (value) => {
@@ -37,19 +37,28 @@ export const string = {
   min(this: Context, data: any, min: number, msg: string = "") {
     return this.validate.string(data, (value) => {
       const valid = !!(value && value.length >= min);
-      return { valid, error: valid ? null : msg || `too short - min length ${min}` };
+      return {
+        valid,
+        error: valid ? null : msg || `too short - min length ${min}`,
+      };
     });
   },
   max(this: Context, data: any, max: number, msg: string = "") {
     return this.validate.string(data, (value) => {
       const valid = !!(value && value.length <= max);
-      return { valid, error: valid ? null : msg || `too long - max length ${max}` };
+      return {
+        valid,
+        error: valid ? null : msg || `too long - max length ${max}`,
+      };
     });
   },
   length(this: Context, data: any, length: number, msg: string = "") {
     return this.validate.string(data, (value) => {
       const valid = !!(value && value.length === length);
-      return { valid, error: valid ? null : msg || `invalid length - length ${length}` };
+      return {
+        valid,
+        error: valid ? null : msg || `invalid length - length ${length}`,
+      };
     });
   },
   match(this: Context, data: any, pattern: string, msg: string = "") {
@@ -58,4 +67,4 @@ export const string = {
       return { valid, error: valid ? null : msg || "invalid pattern" };
     });
   },
-}
+};

@@ -118,3 +118,5 @@ const enhancedApi = {
 const validate = fluent({ api: enhancedApi, ctx });
 const email = validate.string.email().required();
 assert.strictEqual(email.run({ value: "test" }).valid, false);
+
+const test = email.run({ value: "test" });

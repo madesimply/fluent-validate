@@ -27,5 +27,5 @@ export const boolean = {
       const valid = value !== undefined && value !== null;
       return { valid, error: valid ? null : msg || "boolean is required" };
     });
-  }
+  },
 };
