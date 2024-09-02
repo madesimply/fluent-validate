@@ -7,7 +7,7 @@ fluent-validate is a flexible and chainable validation library built on top of F
 To install fluent-validate, use npm:
 
 ```bash
-npm install fluent-validate
+npm install github:madesimply/fluent-validate
 ```
 
 ## Quickstart
