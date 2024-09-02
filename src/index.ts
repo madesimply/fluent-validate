@@ -4,8 +4,8 @@ import { number } from "./number";
 import { array } from "./array";
 import { object } from "./object";
 import { boolean } from "./boolean";
-import type { Infer } from "./types";
 import { ctx } from "./context";
+import type { Infer } from "./types";
 
 export type Api = {
   string: typeof string;

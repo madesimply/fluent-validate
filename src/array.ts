@@ -1,4 +1,3 @@
-import { AnyPtrRecord } from "dns";
 import { Context } from "./types";
 
 function validate(
@@ -36,9 +35,7 @@ function validate(
 }
 
 export const array = {
-  coerce(this: Context, data: AnyPtrRecord) {
-    if (!this.validate) throw new Error("validate is not defined in context");
-
+  coerce(this: Context, data: any) {
     try {
       this.validate.set("value", data, JSON.parse(data.value));
     } catch (e) {}
@@ -48,8 +45,6 @@ export const array = {
     });
   },
   default(this: Context, data: any, defaultValue: any[]) {
-    if (!this.validate) throw new Error("validate is not defined in context");
-
     const value = this.validate.get("value", data);
     if (value === undefined || value === null) {
       this.validate.set("value", data, defaultValue);
@@ -88,9 +83,6 @@ export const array = {
       const valid =
         value &&
         value.every((v: any) => {
-          if (!this.validate)
-            throw new Error("validate is not defined in context");
-
           const _data = {};
           this.validate.set("value", _data, v);
 

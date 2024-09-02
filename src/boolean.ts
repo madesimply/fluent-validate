@@ -30,8 +30,6 @@ function validate (self: Context, data: any, validator: ({ value }: { value: any
 
 export const boolean = {
   coerce(this: Context, data: any) {
-    if (!this.validate) throw new Error("validate is not defined in context");
-
     try {
       const value = this.validate.get("value", data, false);
       this.validate.set("value", data, Boolean(value));
@@ -42,8 +40,6 @@ export const boolean = {
     });
   },
   default(this: Context, data: any, defaultValue: boolean) {
-    if (!this.validate) throw new Error("validate is not defined in context");
-
     const value = this.validate.get("value", data, null);
     if (value === undefined || value === null) {
       this.validate.set("value", data, defaultValue);

@@ -30,9 +30,6 @@ function validate (self: Context, data: any, validator: ({ value }: { value: any
 
 export const object = {
   coerce(this: Context, data: any) {
-    if (!this.validate) 
-      throw new Error("validate is not defined in context");
-
     try {
       this.validate.set("value", data, JSON.parse(data.value));
     } catch (e) {}
@@ -42,9 +39,6 @@ export const object = {
     });
   },
   default(this: Context, data: any, defaultValue: Record<string, any>) {
-    if (!this.validate) 
-      throw new Error("validate is not defined in context");
-
     const value = this.validate.get("value", data, null);
     if (value === undefined || value === null) {
       this.validate.set("value", data, defaultValue);
@@ -65,9 +59,6 @@ export const object = {
       const keys = Object.keys(props);
       let valid = true;
       let failedKeys: string[] = [];
-
-      if (!this.validate)
-        throw new Error("validate is not defined in context");
 
       for (const key of keys) {
         const validator = props[key];

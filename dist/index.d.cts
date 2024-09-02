@@ -1,5 +1,4 @@
 import { Fluent } from 'fluent';
-import { AnyPtrRecord } from 'dns';
 
 type MethodToType<M extends string> = M extends `string${string}` ? string : M extends `number${string}` ? number : M extends `array${string}` ? any[] : M extends `object${string}` ? object : never;
 type ExtractChain<T> = T extends {
@@ -29,7 +28,7 @@ type InferObjectProps<A> = A extends [infer P] ? P extends Record<string, any> ?
 type MergeInferredTypes<T> = CleanAndMutable<T extends [infer First, ...infer Rest] ? InferSingle<First> extends infer S ? [S] extends [never] ? MergeInferredTypes<Rest> : S extends any[] ? S : S & MergeInferredTypes<Rest> : never : unknown>;
 type Infer<T> = CleanAndMutable<MergeInferredTypes<ExtractChain<T>>>;
 type Context = {
-    validate?: {
+    validate: {
         get: (target: 'value' | 'valid' | 'errors', data: any, defaultValue?: any) => any;
         set: (target: 'value' | 'valid' | 'errors', data: any, value: any) => any;
     };
@@ -57,7 +56,7 @@ declare const number: {
 };
 
 declare const array: {
-    coerce(this: Context, data: AnyPtrRecord): any;
+    coerce(this: Context, data: any): any;
     default(this: Context, data: any, defaultValue: any[]): any;
     required(this: Context, data: any, msg?: string): any;
     min(this: Context, data: any, min: number, msg?: string): any;
