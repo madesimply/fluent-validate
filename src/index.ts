@@ -3,13 +3,16 @@ import { string } from "./string";
 import { number } from "./number";
 import { array } from "./array";
 import { object } from "./object";
+import { boolean } from "./boolean";
 import type { Infer } from "./types";
+import { ctx } from "./context";
 
 export type Api = {
   string: typeof string;
   number: typeof number;
   array: typeof array;
   object: typeof object;
+  boolean: typeof boolean;
 };
 
 export const api: Api = {
@@ -17,8 +20,9 @@ export const api: Api = {
   number,
   array,
   object,
+  boolean,
 };
 
-export const validate = fluent({ api }) as Fluent<Api, Api, []>;
+export const validate = fluent({ api, ctx }) as Fluent<Api, Api, []>;
 
-export { Infer };
+export { Infer, ctx };

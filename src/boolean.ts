@@ -8,11 +8,11 @@ function validate (self: Context, data: any, validator: ({ value }: { value: any
   self.validate.set("errors", data, errors);
   self.validate.set("valid", data, errors.length === 0);
 
-  const value = self.validate.get("value", data) as number;
-  if (typeof value !== "number") {
+  const value = self.validate.get("value", data) as boolean;
+  if (typeof value !== "boolean") {
     self.validate.set("valid", data, false);
-    if (!errors.includes("invalid number")) {
-      errors.push("invalid number");
+    if (!errors.includes("invalid boolean")) {
+      errors.push("invalid boolean");
       self.validate.set("errors", data, errors);
     }
     return data;
@@ -28,20 +28,20 @@ function validate (self: Context, data: any, validator: ({ value }: { value: any
   return data;
 }
 
-export const number = {
+export const boolean = {
   coerce(this: Context, data: any) {
     if (!this.validate) throw new Error("validate is not defined in context");
 
     try {
-      const value = this.validate.get("value", data, 0);
-      this.validate.set("value", data, Number(value));
+      const value = this.validate.get("value", data, false);
+      this.validate.set("value", data, Boolean(value));
     } catch (e) {}
 
     return validate(this, data, () => {
       return { valid: true, error: null };
     });
   },
-  default(this: Context, data: any, defaultValue: number) {
+  default(this: Context, data: any, defaultValue: boolean) {
     if (!this.validate) throw new Error("validate is not defined in context");
 
     const value = this.validate.get("value", data, null);
@@ -56,31 +56,7 @@ export const number = {
   required(this: Context, data: any, msg: string = "") {
     return validate(this, data, ({ value }) => {
       const valid = value !== undefined && value !== null;
-      return { valid, error: valid ? null : msg || "number is required" };
-    });
-  },
-  enum(this: Context, data: any, values: number[], msg: string = "") {
-    return validate(this, data, ({ value }) => {
-      const valid = values.includes(value);
-      return { valid, error: valid ? null : msg || "invalid value" };
-    });
-  },
-  min(this: Context, data: any, min: number, msg: string = "") {
-    return validate(this, data, ({ value }) => {
-      const valid = value >= min;
-      return { valid, error: valid ? null : msg || `too small - min value ${min}` };
-    });
-  },
-  max(this: Context, data: any, max: number, msg: string = "") {
-    return validate(this, data, ({ value }) => {
-      const valid = value <= max;
-      return { valid, error: valid ? null : msg || `too large - max value ${max}` };
-    });
-  },
-  integer(this: Context, data: any, msg: string = "") {
-    return validate(this, data, ({ value }) => {
-      const valid = Number.isInteger(value);
-      return { valid, error: valid ? null : msg || "invalid integer" };
+      return { valid, error: valid ? null : msg || "boolean is required" };
     });
   }
-}
+};

@@ -1,4 +1,5 @@
 import { Fluent } from 'fluent';
+import { AnyPtrRecord } from 'dns';
 
 type MethodToType<M extends string> = M extends `string${string}` ? string : M extends `number${string}` ? number : M extends `array${string}` ? any[] : M extends `object${string}` ? object : never;
 type ExtractChain<T> = T extends {
@@ -27,10 +28,15 @@ type InferObjectProps<A> = A extends [infer P] ? P extends Record<string, any> ?
 } : never : never;
 type MergeInferredTypes<T> = CleanAndMutable<T extends [infer First, ...infer Rest] ? InferSingle<First> extends infer S ? [S] extends [never] ? MergeInferredTypes<Rest> : S extends any[] ? S : S & MergeInferredTypes<Rest> : never : unknown>;
 type Infer<T> = CleanAndMutable<MergeInferredTypes<ExtractChain<T>>>;
-type Context = {};
+type Context = {
+    validate?: {
+        get: (target: 'value' | 'valid' | 'errors', data: any, defaultValue?: any) => any;
+        set: (target: 'value' | 'valid' | 'errors', data: any, value: any) => any;
+    };
+};
 
 declare const string: {
-    coerce(this: Context, data: any, msg?: string): any;
+    coerce(this: Context, data: any): any;
     default(this: Context, data: any, defaultValue: string): any;
     required(this: Context, data: any, msg?: string): any;
     enum(this: Context, data: any, values: string[], msg?: string): any;
@@ -41,7 +47,7 @@ declare const string: {
 };
 
 declare const number: {
-    coerce(this: Context, data: any, msg?: string): any;
+    coerce(this: Context, data: any): any;
     default(this: Context, data: any, defaultValue: number): any;
     required(this: Context, data: any, msg?: string): any;
     enum(this: Context, data: any, values: number[], msg?: string): any;
@@ -51,7 +57,7 @@ declare const number: {
 };
 
 declare const array: {
-    coerce(this: Context, data: any, msg?: string): any;
+    coerce(this: Context, data: AnyPtrRecord): any;
     default(this: Context, data: any, defaultValue: any[]): any;
     required(this: Context, data: any, msg?: string): any;
     min(this: Context, data: any, min: number, msg?: string): any;
@@ -60,19 +66,28 @@ declare const array: {
 };
 
 declare const object: {
-    coerce(this: Context, data: any, msg?: string): any;
+    coerce(this: Context, data: any): any;
     default(this: Context, data: any, defaultValue: Record<string, any>): any;
     required(this: Context, data: any, msg?: string): any;
     props(this: Context, data: any, props: Record<string, any>, msg?: string): any;
 };
+
+declare const boolean: {
+    coerce(this: Context, data: any): any;
+    default(this: Context, data: any, defaultValue: boolean): any;
+    required(this: Context, data: any, msg?: string): any;
+};
+
+declare const ctx: Context;
 
 type Api = {
     string: typeof string;
     number: typeof number;
     array: typeof array;
     object: typeof object;
+    boolean: typeof boolean;
 };
 declare const api: Api;
 declare const validate: Fluent<Api, Api, []>;
 
-export { type Api, type Infer, api, validate };
+export { type Api, type Infer, api, ctx, validate };
