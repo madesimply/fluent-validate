@@ -27,10 +27,20 @@ type InferObjectProps<A> = A extends [infer P] ? P extends Record<string, any> ?
 } : never : never;
 type MergeInferredTypes<T> = CleanAndMutable<T extends [infer First, ...infer Rest] ? InferSingle<First> extends infer S ? [S] extends [never] ? MergeInferredTypes<Rest> : S extends any[] ? S : S & MergeInferredTypes<Rest> : never : unknown>;
 type Infer<T> = CleanAndMutable<MergeInferredTypes<ExtractChain<T>>>;
+type Validator = (value: any) => {
+    valid: boolean;
+    error: string | null;
+    value?: any;
+};
 type Context = {
     validate: {
         get: (target: 'value' | 'valid' | 'errors', data: any, defaultValue?: any) => any;
         set: (target: 'value' | 'valid' | 'errors', data: any, value: any) => any;
+        string: (data: any, validator: Validator) => any;
+        number: (data: any, validator: Validator) => any;
+        boolean: (data: any, validator: Validator) => any;
+        array: (data: any, validator: Validator) => any;
+        object: (data: any, validator: Validator) => any;
     };
 };
 
@@ -87,6 +97,6 @@ type Api = {
     boolean: typeof boolean;
 };
 declare const api: Api;
-declare const validate: Fluent<Api, Api, []>;
+declare const validator: Fluent<Api, Api, []>;
 
-export { type Api, type Infer, api, ctx, validate };
+export { type Api, type Context, type Infer, api, ctx, validator };

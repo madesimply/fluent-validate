@@ -5,7 +5,7 @@ import { array } from "./array";
 import { object } from "./object";
 import { boolean } from "./boolean";
 import { ctx } from "./context";
-import type { Infer } from "./types";
+import type { Context, Infer } from "./types";
 
 export type Api = {
   string: typeof string;
@@ -23,6 +23,7 @@ export const api: Api = {
   boolean,
 };
 
-export const validate = fluent({ api, ctx }) as Fluent<Api, Api, []>;
+export const validator = fluent({ api, ctx }) as Fluent<Api, Api, []>;
 
-export { Infer, ctx };
+export { Infer, Context, ctx };
+

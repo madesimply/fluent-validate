@@ -131,13 +131,13 @@ function set(target: 'value' | 'valid' | 'errors', data: any, value: any) {
 
 ### Customizing Data Access
 
-You can customize this behavior by providing your own `get` and `set` functions when initializing the validator. This allows you to work with different data structures or property names.
+You can customize this behavior by providing your own `get` and `set` functions and initializing your own fluent validator. This allows you to work with different data structures or property names.
 
 Here's an example of how to set up custom get/set functions:
 
 ```typescript
 import { fluent } from 'fluent';
-import { api } from 'fluent-validate';
+import { api, ctx } from 'fluent-validate';
 
 const customGet = (target: 'value' | 'valid' | 'errors', data: any, defaultValue?: any) => {
   // Custom logic to retrieve data
@@ -155,6 +155,7 @@ const customSet = (target: 'value' | 'valid' | 'errors', data: any, value: any) 
 
 const ctx = {
   validate: { 
+    ...ctx,
     get: customGet,
     set: customSet,
   }
@@ -164,6 +165,44 @@ export const validate = fluent({ api, ctx });
 ```
 
 With this setup, the validator will use your custom `get` and `set` functions to access and modify the data object. This allows you to use fluent-validate with various data structures or integrate it more easily with existing codebases that have different conventions for storing validation state.
+
+
+### Extending The Api
+
+You can add custom validations to the base types (`string`, `number`, `boolean`, `array` or `object`) by extending the base `api` and initializing your own validator. 
+
+API methods take the following args: 
+- `this: Context` the context of the api
+- `data: any` the data sent to run
+- `arg: ...any[]` any args you want to expose via the chain
+- `msg: string = ""` an optional custom error message
+
+API methods must call one of the base validators available via the context and be sent `data` and a function that returns `{ valid: boolean, error: string | null, value?: any }`
+
+If provided a value, and if that value is a valid type -> you can set it for things like casting. 
+
+If an error is provided it will be added to the `errors` array. The `validators` handle getting and setting to the correct keys via the `ctx.get` and `ctx.set`
+
+```typescript
+import { fluent } from 'fluent';
+import { api, ctx, Context } from 'fluent-validate';
+
+const enhancedApi = {
+  ...api,
+  string: {
+    ...api.string,
+    email(this: Context, data: any, msg: string = "") { 
+      return this.validate.string(data, (value) => {
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        return { valid, error: valid ? null : msg || "invalid email" };
+      });
+    }
+  }
+}
+
+const validate = fluent({ api: enhancedApi, ctx });
+const valid = validate.string.email('invalid email').run({ value: 'test' }).valid; // false
+```
 
 ## License
 

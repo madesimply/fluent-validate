@@ -1,4 +1,5 @@
-import { validate as v } from "../dist/index.js";
+import { fluent } from "fluent";
+import { validator as v, api, ctx } from "../dist/index.js";
 import assert from "assert";
 
 const stringChains = [
@@ -100,3 +101,20 @@ assert.strictEqual(booleanChains[0].run({ value: "true" }).value, true);
 assert.strictEqual(booleanChains[1].run({ value: undefined }).value, true);
 assert.strictEqual(booleanChains[2].run({ value: undefined }).valid, false);
 assert.strictEqual(booleanChains[2].run({ value: true }).valid, true);
+
+const enhancedApi = {
+  ...api,
+  string: {
+    ...api.string,
+    email(data, msg = "") { 
+      return this.validate.string(data, (value) => {
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        return { valid, error: valid ? null : msg || "invalid email" };
+      });
+    }
+  }
+}
+
+const validate = fluent({ api: enhancedApi, ctx });
+const email = validate.string.email().required();
+assert.strictEqual(email.run({ value: "test" }).valid, false);

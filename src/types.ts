@@ -53,9 +53,16 @@ type MergeInferredTypes<T> = CleanAndMutable<
 
 export type Infer<T> = CleanAndMutable<MergeInferredTypes<ExtractChain<T>>>;
 
+export type Validator = (value: any) => { valid: boolean; error: string | null, value?: any };
+
 export type Context = {
   validate: {
     get: (target: 'value' | 'valid' | 'errors', data: any, defaultValue?: any) => any;
-    set: (target: 'value' | 'valid' | 'errors', data: any, value: any) => any
+    set: (target: 'value' | 'valid' | 'errors', data: any, value: any) => any;
+    string: (data: any, validator: Validator) => any;
+    number: (data: any, validator: Validator) => any;
+    boolean: (data: any, validator: Validator) => any;
+    array: (data: any, validator: Validator) => any;
+    object: (data: any, validator: Validator) => any;
   };
 };
