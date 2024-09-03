@@ -1,6 +1,7 @@
 {
   "name": "fluent-validate",
   "type": "module",
+  "version": "0.0.1",
   "author": {
     "name": "Paul Pomerleau",
     "url": "https://github.com/paulpomerleau"
