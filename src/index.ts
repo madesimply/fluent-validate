@@ -23,6 +23,6 @@ export const api: Api = {
   boolean,
 };
 
-export const validator = fluent({ api, ctx }) as Fluent<Api, Api, []>;
+export const validate = fluent({ api, ctx }) as Fluent<Api, Api, []>;
 
 export { Infer, Context, ctx };

@@ -1,5 +1,5 @@
 import { fluent } from "fluent";
-import { validator as v, api, ctx } from "../dist/index.js";
+import { validate as v, api, ctx } from "../dist/index.js";
 import assert from "assert";
 
 const stringChains = [

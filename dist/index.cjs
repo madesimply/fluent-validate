@@ -6,6 +6,6 @@ var c={coerce(t){return this.validate.string(t,r=>{try{return {valid:!0,error:nu
 
 exports.api = A;
 exports.ctx = s;
-exports.validator = z;
+exports.validate = z;
 //# sourceMappingURL=index.cjs.map
 //# sourceMappingURL=index.cjs.map

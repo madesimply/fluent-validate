@@ -30,6 +30,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "fluent": "github:paulpomerleau/fluent"
+    "fluent": "github:madesimply/fluent"
   }
 }

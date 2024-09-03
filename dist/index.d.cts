@@ -97,6 +97,6 @@ type Api = {
     boolean: typeof boolean;
 };
 declare const api: Api;
-declare const validator: Fluent<Api, Api, []>;
+declare const validate: Fluent<Api, Api, []>;
 
-export { type Api, type Context, type Infer, api, ctx, validator };
+export { type Api, type Context, type Infer, api, ctx, validate };
