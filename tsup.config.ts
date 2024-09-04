@@ -12,4 +12,5 @@ export default defineConfig({
   minify: true,
   target: 'es2020',
   tsconfig: "./tsconfig.json",
+  external: ["fluent"]
 });
